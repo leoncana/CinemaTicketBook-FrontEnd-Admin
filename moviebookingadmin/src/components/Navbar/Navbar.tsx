@@ -2,8 +2,33 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import './Navbar.sass';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
+
+    const handleLogout = async () => {
+        try{
+            const response = await fetch('http://localhost:8000/admin/logout', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  credentials: 'include'
+                });
+                if (response.ok) {
+                    toast.success('Admin logout Successful', {
+                    });
+                    window.location.href = '/';
+                  } else {
+                    toast.error('Logout Failed');
+                  }
+                //console.log('logout');
+                //window.location.href='/';
+            }catch (error) {
+                toast.error('An error occurred during logout');
+                console.error('An error occurred during logout', error);
+            }
+      }
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
     const checkAdminAuthentication = async () => {
         try {
@@ -45,7 +70,7 @@ const Navbar = () => {
                         <Link href='/pages/movie/createmovie'>Add Movie</Link>
                         <Link href='/pages/screen'>Add Screen</Link>
                         <Link href='/pages/schedule'>Add Schedule</Link>
-                        <Link href='/logout'>Logout</Link>
+                        <span><button onClick={handleLogout}>Logout</button></span>
                     </>
                 ) : (
                     <>
@@ -55,6 +80,7 @@ const Navbar = () => {
                     </>
                 )}
             </div>
+            
         </div >
     )
 }
