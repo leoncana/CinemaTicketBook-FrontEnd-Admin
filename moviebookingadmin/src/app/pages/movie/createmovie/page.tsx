@@ -1,23 +1,31 @@
 "use client"
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
-import '../movie.sass'
 
 interface Movie {
   title: string;
   description: string;
-  imgUrl: string;
+  portraitImgUrl: string;
+  portraitImg: File | null;
+  landscapeImgUrl: string;
+  landscapeImg: File | null;
   rating: number;
   genre: string[];
   duration: number;
 }
+
+
+
 
 const CreateMoviePage = () => {
 
   const [movie, setMovie] = useState<Movie>({
     title: "",
     description: "",
-    imgUrl: "",
+    portraitImgUrl: "",
+    portraitImg: null,
+    landscapeImgUrl: "",
+    landscapeImg: null,
     rating: 0,
     genre: [],
     duration: 0,
@@ -57,7 +65,7 @@ const CreateMoviePage = () => {
       const formData = new FormData();
       formData.append("myimage", image);
       const response = await fetch(
-        `http://localhost:8000/image/uploadimage`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/image/uploadimage`,
         {
           method: "POST",
           body: formData,
@@ -87,25 +95,38 @@ const CreateMoviePage = () => {
         movie.genre.length === 0 ||
         movie.duration === 0
       ) {
-        toast.error("Please fill all the fields");
+        toast.error("Please fill all the fields", {
+          position: toast.POSITION.TOP_CENTER,
+        });
         return;
       }
 
-      // let imgUrl = movie.imgUrl;
-      
-      // if (movie.portraitImg) {
-      //   imgUrl = await uploadImage(movie.portraitImg);
-      //   if (!imgUrl) {
-      //     toast.error("Portrait Image upload failed");
-      //     return;
-      //   }
-      // }
-      
+      let portraitImgUrl = movie.portraitImgUrl;
+      let landscapeImgUrl = movie.landscapeImgUrl;
 
-      const newMovie = { ...movie };
+      if (movie.portraitImg) {
+        portraitImgUrl = await uploadImage(movie.portraitImg);
+        if (!portraitImgUrl) {
+          toast.error("Portrait Image upload failed", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
+      }
+      if (movie.landscapeImg) {
+        landscapeImgUrl = await uploadImage(movie.landscapeImg);
+        if (!landscapeImgUrl) {
+          toast.error("Landscape Image upload failed", {
+            position: toast.POSITION.TOP_CENTER,
+          });
+          return;
+        }
+      }
+
+      const newMovie = { ...movie, portraitImgUrl, landscapeImgUrl };
 
       const response = await fetch(
-        `http://localhost:8000/movie/createmovie`,
+        `${process.env.NEXT_PUBLIC_BACKEND_API}/movie/createmovie`,
         {
           method: "POST",
           headers: {
@@ -120,10 +141,14 @@ const CreateMoviePage = () => {
         const data = await response.json();
         console.log("Movie creation successful", data);
 
-        toast.success("Movie Created Successfully");
+        toast.success("Movie Created Successfully", {
+          position: toast.POSITION.TOP_CENTER,
+        });
       } else {
         console.error("Movie creation failed", response.statusText);
-        toast.error("Movie Creation Failed");
+        toast.error("Movie Creation Failed", {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
     catch (error) {
@@ -132,11 +157,7 @@ const CreateMoviePage = () => {
   }
 
   return (
-    <div className="formpage"  style={{
-      display: 'flex',
-      flexDirection: 'column',
-  }}>
-    <label> Title </label>
+    <div className="formpage">
       <input
         type="text"
         name="title"
@@ -145,35 +166,53 @@ const CreateMoviePage = () => {
         onChange={handleInputChange}
       />
       <br />
-      <label>Description</label>
       <input
         type="text"
         name="description"
-        placeholder="Movie description"
+        placeholder="Description"
         value={movie.description}
         onChange={handleInputChange}
       />
       <br />
       <label>Portrait Image</label>
-      <input type="text" name="imgUrl"
-        value={movie.imgUrl}
-        onChange={handleInputChange}
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(event) => {
+          if (event.target.files && event.target.files.length > 0) {
+            setMovie({ ...movie, portraitImg: event.target.files[0] })
+          }
+        }}
       />
-      
+      <br />
+      <label>Landscape Image</label>
+      <input
+        type="file"
+        accept="image/*"
+        onChange={(event) => {
+          if (event.target.files && event.target.files.length > 0) {
+            setMovie({ ...movie, landscapeImg: event.target.files[0] })
+          }
+        }}
+      />
       <br />
 
       <label>Rating</label>
-      <input type="number" name="rating" placeholder="Rating"
+      <input
+        type="number"
+        name="rating"
+        placeholder="Rating"
         value={movie.rating}
         onChange={handleInputChange}
       />
       <br />
-
       <div>
         <p>Select Genres:</p>
         {genres.map((genre) => (
-          <label id="genre" key={genre}>
-            <input type="checkbox" name="genre"
+          <label key={genre}>
+            <input
+              type="checkbox"
+              name="genre"
               checked={movie.genre.includes(genre)}
               onChange={() => handleGenreChange(genre)}
             />
@@ -185,13 +224,17 @@ const CreateMoviePage = () => {
       <br />
 
       <label>Duration</label>
-      <input type="number" name="duration" placeholder="Duration"
+      <input
+        type="number"
+        name="duration"
+        placeholder="Duration"
         value={movie.duration}
         onChange={handleInputChange}
       />
       <br />
 
       <button onClick={handleCreateMovie}>Create Movie</button>
+
     </div>
   )
 }

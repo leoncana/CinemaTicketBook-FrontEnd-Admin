@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import '../auth.sass';
+import '../auth.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 const SigninPage = () => {
@@ -24,14 +24,16 @@ const SigninPage = () => {
         console.log('Admin login successful', data);
 
         toast.success('Admin Login Successful', {
-          //position: toast.POSITION.TOP_CENTER,
+          position: toast.POSITION.TOP_CENTER,
         });
         window.location.href = '/pages/movie/createmovie';
 
       } else {
         // Handle login error
         console.error('Admin login failed', response.statusText);
-        toast.error('Admin Login Failed');
+        toast.error('Admin Login Failed', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
     catch (error) {
@@ -42,16 +44,17 @@ const SigninPage = () => {
 
   
   return (
-    <div className='formpage' style={{
-        display: 'flex',
-        flexDirection: 'column',
-    }}>
+    <div className='formpage'>
      
-      <input type='email' placeholder='Email'
+      <input
+        type='email'
+        placeholder='Email'
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input type='password' placeholder='Password'
+      <input
+        type='password'
+        placeholder='Password'
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
