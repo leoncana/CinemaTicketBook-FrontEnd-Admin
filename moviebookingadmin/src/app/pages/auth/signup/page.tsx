@@ -2,8 +2,6 @@
 import React, { useState } from 'react'
 import { ToastContainer, toast } from "react-toastify";
 import '../auth.sass'
-import { redirect } from 'next/navigation'
-
 
 const SignupPage = () => {
   const [name, setName] = useState('');
@@ -11,7 +9,7 @@ const SignupPage = () => {
   const [password, setPassword] = useState('');
   const handleSignup = async () => {
     try {
-      const response = await fetch('http://localhost:8000/admin/register', {
+      const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API + '/admin/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -26,7 +24,7 @@ const SignupPage = () => {
         console.log('Admin registration successful', data);
         toast.success('Admin Registration Successful', {
         });
-        window.location.href = '/';
+        
       } else {
         // Handle signup error
         console.error('Admin registration failed', response.statusText);
@@ -39,12 +37,11 @@ const SignupPage = () => {
     }
   }
 
-
   return (
     <div className='formpage' style={{
       display: 'flex',
       flexDirection: 'column',
-  }}>
+    }}>
       <input type='text' placeholder='Name'
         value={name}
         onChange={(e) => setName(e.target.value)}
