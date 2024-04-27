@@ -3,6 +3,8 @@ import React from 'react'
 import './schedule.css'
 import { ToastContainer, toast } from "react-toastify";
 
+
+
 interface schedule {
   screenId: string,
   movieId: string,
@@ -13,7 +15,7 @@ interface Screen {
   _id: string;
   name: string;
   location: string;
-  seats: any[]; 
+  seats: any[]; // Change the type to an array of numbers
   city: string;
   screenType: string;
 }
@@ -24,12 +26,14 @@ interface Movie {
   description: string;
   portraitImgUrl: string;
   portraitImg: File | null;
+  landscapeImgUrl: string;
+  landscapeImg: File | null;
   rating: number;
   genre: string[];
   duration: number;
 }
 
-const SchedulePage = () => {
+const page = () => {
   const [schedule, setSchedule] = React.useState<schedule>({
     screenId: '',
     movieId: '',
@@ -52,11 +56,14 @@ const SchedulePage = () => {
     getMovies()
   }, [])
 
+
+
   const getScreensByCity = async () => {
     if (city === '') return toast.error('Please select a city')
     const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_API}/movie/screensbycity/${city.toLowerCase()}`)
     const data = await res.json()
     setScreens(data.data)
+    console.log(data.data)
   }
 
   const createSchedule = async () => {
@@ -82,8 +89,8 @@ const SchedulePage = () => {
     } else {
       toast.error("Schedule creation failed");
     }
-  }
 
+  }
   return (
     <div className="formpage">
       <div className='citysearch'>
@@ -117,6 +124,7 @@ const SchedulePage = () => {
           ))}
       </div>
 
+
       <div className='items'>
         <h1>Movies</h1>
         {
@@ -137,6 +145,7 @@ const SchedulePage = () => {
           ))}
       </div>
 
+
       <input type="time" name="showTime" id="showTime"
         onChange={(e) => setSchedule({ ...schedule, showTime: e.target.value })}
       />
@@ -153,4 +162,4 @@ const SchedulePage = () => {
   )
 }
 
-export default SchedulePage
+export default page
