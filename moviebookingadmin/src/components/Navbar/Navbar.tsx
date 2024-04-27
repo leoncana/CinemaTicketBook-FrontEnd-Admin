@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import './Navbar.css';
 import logo from './logo.png';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
@@ -47,7 +48,7 @@ const Navbar = () => {
                         <Link href='/pages/movie/createmovie'>Add Movie</Link>
                         <Link href='/pages/screen'>Add Screen</Link>
                         <Link href='/pages/schedule'>Add Schedule</Link>
-                        <Link href='/pages/movie/addceleb'>Add Celeb</Link>
+                        <span><button onClick={handleLogout}>Logout</button></span>
                     </>
                 ) : (
                     <>
@@ -59,6 +60,29 @@ const Navbar = () => {
             </div>
         </div >
     )
+}
+
+const handleLogout = async () => {
+    try {
+        const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API+'/admin/logout', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+              credentials: 'include'
+            });
+            if (response.ok) {
+                toast.success('Admin logout Successful', {
+                });
+                window.location.href = '/';
+              } else {
+                toast.error('Logout Failed');
+              }
+            //console.log('logout');
+    } catch (error) {
+        toast.error('An error occurred during logout');
+        console.error('An error occurred during logout', error);
+    }
 }
 
 export default Navbar
