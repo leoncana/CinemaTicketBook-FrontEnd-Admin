@@ -74,8 +74,8 @@ const Navbar = () => {
                 ) : (
                     <>
                         {/* Show login/signup links for unauthenticated admin */}
-                        <Link href='/pages/auth/signin'>Login</Link>
-                        <Link href='/pages/auth/signup'>Signup</Link>
+                        <Link href='/pages/admin/signin'>Login</Link>
+                        <Link href='/pages/admin/signup'>Signup</Link>
                     </>
                 )}
             </div>
