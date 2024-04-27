@@ -1,12 +1,13 @@
-"use client"
-import React, { useState } from 'react'
-import { ToastContainer, toast } from "react-toastify";
-import '../auth.sass'
+"use client";
+import React, { useState } from 'react';
+import '../auth.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 const SignupPage = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+
   const handleSignup = async () => {
     try {
       const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API + '/admin/register', {
@@ -22,13 +23,16 @@ const SignupPage = () => {
         const data = await response.json();
         // Handle successful signup, e.g., show a success message
         console.log('Admin registration successful', data);
+
         toast.success('Admin Registration Successful', {
+          position: toast.POSITION.TOP_CENTER,
         });
-        
       } else {
         // Handle signup error
         console.error('Admin registration failed', response.statusText);
-        toast.error('Admin Registration Failed');
+        toast.error('Admin Registration Failed', {
+          position: toast.POSITION.TOP_CENTER,
+        });
       }
     }
     catch (error) {
@@ -37,20 +41,24 @@ const SignupPage = () => {
     }
   }
 
+
   return (
-    <div className='formpage' style={{
-      display: 'flex',
-      flexDirection: 'column',
-    }}>
-      <input type='text' placeholder='Name'
+    <div className='formpage'>
+      <input
+        type='text'
+        placeholder='Name'
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
-      <input type='email' placeholder='Email'
+      <input
+        type='email'
+        placeholder='Email'
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
-      <input type='password' placeholder='Password'
+      <input
+        type='password'
+        placeholder='Password'
         value={password}
         onChange={(e) => setPassword(e.target.value)}
       />
