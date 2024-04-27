@@ -7,8 +7,8 @@ import { toast } from 'react-toastify';
 const Navbar = () => {
 
     const handleLogout = async () => {
-        try{
-            const response = await fetch('http://localhost:8000/admin/logout', {
+        try {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API+'/admin/logout', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -23,42 +23,41 @@ const Navbar = () => {
                     toast.error('Logout Failed');
                   }
                 //console.log('logout');
-                //window.location.href='/';
-            }catch (error) {
-                toast.error('An error occurred during logout');
-                console.error('An error occurred during logout', error);
-            }
-      }
+        } catch (error) {
+            toast.error('An error occurred during logout');
+            console.error('An error occurred during logout', error);
+        }
+    }
+
     const [isAdminAuthenticated, setIsAdminAuthenticated] = useState(false);
+    
     const checkAdminAuthentication = async () => {
         try {
-            const response = await fetch('http://localhost:8000/admin/checklogin', {
+            const response = await fetch(process.env.NEXT_PUBLIC_BACKEND_API+'/admin/checklogin', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 credentials: 'include'
-
             });
             if (response.ok) {
                 // Admin is authenticated
                 setIsAdminAuthenticated(true);
             } else {
                 // Admin is not authenticated
-                setIsAdminAuthenticated(false);
-               
+                setIsAdminAuthenticated(false);   
             }
         }
         catch (error) {
             console.error('An error occurred during admin authentication check', error);
             setIsAdminAuthenticated(false);
-
         }
     }
 
     useEffect(() => {
         checkAdminAuthentication();
     }, []);
+
     return (
         <div className='navbar'>
             <Link href='/'>Admin Panel</Link>
@@ -80,7 +79,6 @@ const Navbar = () => {
                     </>
                 )}
             </div>
-            
         </div >
     )
 }
