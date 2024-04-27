@@ -25,7 +25,8 @@ const SignupPage = () => {
         // Handle successful signup, e.g., show a success message
         console.log('Admin registration successful', data);
         toast.success('Admin Registration Successful', {
-        })
+        });
+        window.location.href = '/';
       } else {
         // Handle signup error
         console.error('Admin registration failed', response.statusText);
