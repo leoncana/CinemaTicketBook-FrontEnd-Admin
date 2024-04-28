@@ -1,23 +1,22 @@
-# Specify a base image
-FROM node:14
+# Use the same Node.js version as your local development environment
+FROM node:20
 
-# Set the working directory in the Docker image
 WORKDIR /app
 
-# Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
 
-# Install dependencies
+# If using a .env file, uncomment the next line to copy it into the image
+# COPY .env ./
+
 RUN npm install
 
-# Copy the rest of your application code
 COPY . .
 
-# Build the Next.js application
+# Add this line if you think environment variables are missing
+# ENV MY_ENV_VAR=value
+ENV PORT 3001
 RUN npm run build
 
-# Expose the port the app runs on
 EXPOSE 3001
 
-# Command to run your app
 CMD ["npm", "start"]
