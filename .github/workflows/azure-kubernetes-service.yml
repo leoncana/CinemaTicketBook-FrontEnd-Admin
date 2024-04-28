@@ -39,7 +39,7 @@ env:
   CONTAINER_NAME: "thirsty_hellman"
   RESOURCE_GROUP: "CinemaResourceGroup"
   CLUSTER_NAME: "CinemaCluster"
-  DEPLOYMENT_MANIFEST_PATH: "deployment.yaml"
+  DEPLOYMENT_MANIFEST_PATH: "adminapp-deployment.yaml"
 
 jobs:
   buildImage:
