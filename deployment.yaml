@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cinematicket
+  namespace: cinematicket  # Ensure namespace matches the service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cinema-ticket-app  # This label must match the service selector
+  template:
+    metadata:
+      labels:
+        app: cinema-ticket-app  # This label must match the service selector
+    spec:
+      containers:
+      - name: cinema-ticket-app  # Name of the container
+        image: leoncana10/cinemaadmin:first  # Specify the image tag if known
+        ports:
+        - containerPort: 3001  # Port the container is listening on
