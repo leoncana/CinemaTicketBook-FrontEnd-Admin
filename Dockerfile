@@ -1,21 +1,23 @@
-# Use a Node.js base image
-FROM node:20
+# Specify a base image
+FROM node:14
 
-# Create and change to the app directory
+# Set the working directory in the Docker image
 WORKDIR /app
 
-# Copy package.json, package-lock.json, and the .next directory
+# Copy package.json and package-lock.json (or yarn.lock)
 COPY package*.json ./
-COPY . .next/
 
-# Install production dependencies
-RUN npm install --production
+# Install dependencies
+RUN npm install
 
-# Copy the rest of the application
+# Copy the rest of your application code
 COPY . .
 
-# Expose port 3000
+# Build the Next.js application
+RUN npm run build
+
+# Expose the port the app runs on
 EXPOSE 3001
 
-# Start the application
+# Command to run your app
 CMD ["npm", "start"]
