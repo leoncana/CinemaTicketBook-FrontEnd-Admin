@@ -1,6 +1,6 @@
 "use client"
 import React from 'react'
-import './schedule.css'
+import './schedule.scss'
 import { ToastContainer, toast } from "react-toastify";
 
 
