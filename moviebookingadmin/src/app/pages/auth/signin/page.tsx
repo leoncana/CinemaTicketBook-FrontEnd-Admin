@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from 'react';
-import '../auth.css';
+import '../auth.scss';
 import { ToastContainer, toast } from 'react-toastify';
 
 const SigninPage = () => {
@@ -47,12 +47,14 @@ const SigninPage = () => {
     <div className='formpage'>
      
       <input
+        className='inputbox'
         type='email'
         placeholder='Email'
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       <input
+        className='inputbox'
         type='password'
         placeholder='Password'
         value={password}
